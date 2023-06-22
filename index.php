@@ -6,18 +6,24 @@ spl_autoload_register(function ($class){
     require __DIR__ . "/src/$class.php";
 });
 
+set_exception_handler("ErrorHandler::handleException");
+
 header("Content-type: application/json; charset=UTF-8");
 
 $parts = explode("/", $_SERVER['REQUEST_URI']);
 
-if ($parts[2] != "products") {
+if ($parts[2] != "makanan") {
     http_response_code(404);
     exit;
 }
 
 $id = $parts[3] ?? null;
 
-$controller = new ProductController;
+$database = new Database("localhost", "makanan_hewan", "root", "");
+
+$gateway = new ProductGateway($database);
+ 
+$controller = new ProductController($gateway);
 
 $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
 

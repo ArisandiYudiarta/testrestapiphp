@@ -2,6 +2,10 @@
 
 class ProductController
 {
+    public function __construct(private ProductGateway $gateway)
+    {
+    }
+
     public function processRequest(string $method, ?string $id):void
     {
         if ($id){
@@ -11,7 +15,7 @@ class ProductController
         } else {
 
             $this->processCollectionRequest($method);
-            
+           
         }
     }
 
@@ -24,8 +28,14 @@ class ProductController
     {
         switch ($method){
             case "GET":
-                echo json_encode(["id" => 123]);
+                echo json_encode($this->gateway->getAll());
                 break;
+
+            case "POST":
+                // TODO: cek apa output $_POST harus di konversi lagi ato bisa biar aja output rawnya
+                $data = (array) json_decode(json_encode($_POST),  true);
+
+                var_dump($data);
         }
     }
 }
