@@ -1,6 +1,6 @@
 <?php
 
-class ProductGateway
+class MakananGateway
 {
     private PDO $conn;
 
@@ -8,8 +8,8 @@ class ProductGateway
     {
         $this->conn = $database->getConnection();
     }
-
-    public function getAll(): array 
+    
+    public function getMakanan(): array 
     {
         $sql = "SELECT * FROM makanan";
 
@@ -25,7 +25,7 @@ class ProductGateway
         return $data; 
     }
 
-    public function create(array $data)
+    public function addMakanan(array $data)
     {
         $sql = "INSERT INTO makanan (nama_makanan, gambar, berat)
                 VALUES (:nama_makanan, :gambar, :berat)";
@@ -34,7 +34,7 @@ class ProductGateway
 
         $stmt->bindValue(":nama_makanan", $data["nama_makanan"], PDO::PARAM_STR);
         $stmt->bindValue(":gambar", $data["gambar"], PDO::PARAM_STR);
-        $stmt->bindValue(":berat", $data["berat"], PDO::PARAM_STR);
+        $stmt->bindValue(":berat", $data["berat"] ?? 0, PDO::PARAM_INT);
     }
 } 
 ?>
