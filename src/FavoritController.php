@@ -62,11 +62,8 @@ class FavoritController
                 break;
 
             case "POST":
-                // TODO: cek apa output $_POST harus di konversi lagi ato bisa biar aja output rawnya
-                $data = (array) json_decode(file_get_contents("php://input"), true);
-                // $data = (array) json_decode(json_encode($_POST),  true);
-
-
+                $data = $_POST;
+                
                 $errors = $this->getValidationErrors($data);
                 if (!empty($errors)){
                     http_response_code(422);
@@ -74,7 +71,7 @@ class FavoritController
                     break;
                 }
 
-                // var_dump($data);
+                
                 $id = $this->gateway->addFavorit($data);
 
                 http_response_code(201);

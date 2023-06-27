@@ -37,6 +37,13 @@ if ($parts[2] == "makanan") {
     $controller = new FavoritController($gateway);
     
     $controller->processRequestFavorit($_SERVER["REQUEST_METHOD"], $id);
+}   
+elseif ($parts[2] == "pelanggan" ) {
+    $gateway = new PelangganGateway($database);
+ 
+    $controller = new PelangganController($gateway);
+    
+    $controller->processRequestPelanggan($_SERVER["REQUEST_METHOD"], $id);
 }else{
     http_response_code(404);
     exit;

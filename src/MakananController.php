@@ -21,7 +21,7 @@ class MakananController
 
     private function processResourceRequestMakanan(string $method, string $id): void
     {
-
+        
     }
 
     private function processCollectionRequestMakanan(string $method): void
@@ -32,16 +32,52 @@ class MakananController
                 break;
 
             case "POST":
-                // TODO: cek apa output $_POST harus di konversi lagi ato bisa biar aja output rawnya
-                //TESTING PURPOSES (paste this in the raw section on postman)
-                $dataRaw = file_get_contents("php://input");
-                $data = json_decode($dataRaw);
-                // json_last_error();
-                // $data = (array) json_decode(json_encode($_POST),  true);
-                // $data = $_POST;
+                $data = (array) json_decode(file_get_contents("php://input"), true);
 
-                var_dump($data);
+
+                $errors = $this->getValidationErrors($data);
+                if (!empty($errors)){
+                    http_response_code(422);
+                    echo json_encode(["errors" => $errors]);
+                    break;
+                }
+
+                // var_dump($data);
+                $id = $this->gateway->addMakanan($data);
+
+                http_response_code(201);
+                echo json_encode([
+                    "message" => "Makanan Tersimpan",
+                    "id" => $id
+                ]);
+                break;
+
+            //default output (method not allowed)
+            default:
+                http_response_code(405);
+                header("Allow: GET,POST");
         }
+    }
+
+    //data validation
+    private function getValidationErrors(array $data): array
+    {
+        $errors = [];
+
+        // cek data 
+        if (empty($data["nama_makanan"])){
+            $errors[] = "nama makanan tidak boleh kosong";
+        }
+
+        //check input size biar ga 0
+        if (array_key_exists("berat", $data)){
+
+            if (filter_var($data["berat"], FILTER_VALIDATE_INT) === false){
+                $errors[] = "berat haruslah integer";
+            }
+        }
+
+        return $errors;
     }
 }
 ?>
