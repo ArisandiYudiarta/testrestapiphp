@@ -25,6 +25,34 @@ class MakananGateway
         return $data; 
     }
 
+    public function searchMakanan($data)
+    {
+
+
+        // $sql = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori = :kateori";
+        $sql = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori LIKE :kateori";
+
+        var_dump($data["nama_makanan"]);
+
+        $statement = $this->conn->prepare($sql);
+        $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
+        $statement->bindValue(":kateori", '%' . $data["kategori"] . '%', PDO::PARAM_INT);
+        $statement->execute();
+
+        $data = [];
+
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)){
+
+            $data[] = $row;
+        }
+
+        if (empty($data)) {
+            return 0;
+        }
+
+        return $data; 
+    }
+
     public function addMakanan(array $data): int
     {
         $sql = "INSERT INTO makanan (nama_makanan, gambar, berat, deskripsi, kategori, usia_pemakaian, komposisi, merk, rating)
@@ -46,5 +74,8 @@ class MakananGateway
 
         return $this->conn->lastInsertId();
     }
+
+    
+
 } 
 ?>

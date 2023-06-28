@@ -8,7 +8,11 @@ class MakananController
 
     public function processRequestMakanan(string $method, ?string $id):void
     {
-        if ($id){
+        if ($id == "search"){
+            
+            $this->processSearchMakanan($method, $id);
+
+        }if ($id){
             
             $this->processResourceRequestMakanan($method, $id);
 
@@ -19,9 +23,24 @@ class MakananController
         }
     }
 
-    private function processResourceRequestMakanan(string $method, string $id): void
+    private function processSearchMakanan(string $method, string $id): void
     {
-        
+        switch ($method){
+            case "GET":
+                $data = $_GET;
+
+                echo json_encode($result = $this->gateway->searchMakanan($data));
+                break;
+
+            //default output (method not allowed)
+            default:
+                http_response_code(405);
+                header("Allow: GET");
+        }
+    }
+
+    private function processResourceRequestMakanan(string $method, string $id): void
+    {   
     }
 
     private function processCollectionRequestMakanan(string $method): void
@@ -32,7 +51,7 @@ class MakananController
                 break;
 
             case "POST":
-                $data = (array) json_decode(file_get_contents("php://input"), true);
+                $data = $_POST;
 
 
                 $errors = $this->getValidationErrors($data);

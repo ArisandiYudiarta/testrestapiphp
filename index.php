@@ -14,7 +14,8 @@ set_exception_handler("ErrorHandler::handleException");
 header("Content-type: application/json; charset=UTF-8");
 
 //pecah link u
-$parts = explode("/", $_SERVER['REQUEST_URI']);
+// $parts = explode("/", $_SERVER['REQUEST_URI']);
+$parts = preg_split("/[\/\?]/", $_SERVER['REQUEST_URI']);
 
 // catch id dari link
 $id = $parts[3] ?? null;

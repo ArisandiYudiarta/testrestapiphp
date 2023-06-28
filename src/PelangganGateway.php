@@ -40,44 +40,57 @@ class PelangganGateway
         $checkQuery = "SELECT * FROM pelanggan WHERE username = :username";
 
         $cDupe = $this->conn->prepare($checkQuery);
-
         $cDupe->bindValue(":username", $uname, PDO::PARAM_STR);
-
         $cDupe->execute();
 
         $count = $cDupe->rowCount();
 
         if($count > 0){
-            return "Username ada yang sama";
-        }
+            return 1;
+        }else{
+            $stmt = $this->conn->prepare($sql);
 
-        $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(":username", $data["username"], PDO::PARAM_STR);
+            $stmt->bindValue(":password", $passHash, PDO::PARAM_STR);
+            $stmt->bindValue(":nama", $data["nama"], PDO::PARAM_STR);
+            $stmt->bindValue(":email", $data["email"], PDO::PARAM_STR);
+            $stmt->bindValue(":telp", $data["telp"], PDO::PARAM_STR);
+            
+            $stmt->execute();
 
-        $stmt->bindValue(":username", $data["username"], PDO::PARAM_STR);
-        $stmt->bindValue(":password", $passHash, PDO::PARAM_STR);
-        $stmt->bindValue(":nama", $data["nama"], PDO::PARAM_STR);
-        $stmt->bindValue(":email", $data["email"], PDO::PARAM_STR);
-        $stmt->bindValue(":telp", $data["telp"], PDO::PARAM_STR);
-        
-        $stmt->execute();
-
-        return $this->conn->lastInsertId();
+            return $this->conn->lastInsertId(); 
+        }   
     }
 
-    //req id pelanggan
-    public function getIdPelanggan(string $id): array | false
+    public function Login(array $data): string
     {
-        $sql = "SELECT * FROM makanan_favorit WHERE id_makanan_favorit = :id_makanan_favorit";
+        $userpass = $data['password'];
 
-        $stmt = $this->conn->prepare($sql);
+        $sql = "SELECT username, password 
+                FROM pelanggan 
+                WHERE username = :username";
 
-        $stmt->bindValue(":id_makanan_favorit", $id, PDO::PARAM_INT);
+        $checkQ = $this->conn->prepare($sql);
+        $checkQ->bindValue(":username", $data["username"], PDO::PARAM_STR);
+        $checkQ->execute();
 
-        $stmt->execute();
+        $result = $checkQ->fetch();
 
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        // var_dump($result);
+        // die;
 
-        return $data;
+        $count = $checkQ->rowCount();
+
+        if($count > 0){
+            if (password_verify($userpass, $result['password']))
+            {
+                return 1;
+            }else{
+                return 0;
+            }
+        }else{
+             return 0;
+        }   
     }
 
     public function updatePelanggan(array $current, array $new): int

@@ -33,12 +33,21 @@ class PelangganController
                 // var_dump($data);
                 // die;
                 $id = $this->gateway->Register($data);
-
-                http_response_code(201);
-                echo json_encode([
-                    "message" => "Registrasi Berhasil",
-                    "id" => $id
-                ]);
+                
+                if ($id == 1){
+                    //TODO: masukin error message kalo ada username yang duplikat, kasi juga http response code yang sesuai
+                    echo json_encode([
+                        "message" => "Username Sudah Terpakai",
+                        "id" => $id
+                    ]);
+                }else{
+                    http_response_code(201);
+                    echo json_encode([
+                        "message" => "Registrasi Berhasil",
+                        "id" => $id
+                    ]);
+                }
+                
                 break;
 
             //default output (method not allowed)
@@ -55,16 +64,23 @@ class PelangganController
                 $data = $_POST;
                 // var_dump($data);
                 // die;
-                $id = $this->gateway->Register($data);
+                $id = $this->gateway->Login($data);
 
-                http_response_code(201);
-                echo json_encode([
-                    "message" => "Registrasi Berhasil",
-                    "id" => $id
-                ]);
+                if ($id == 1){
+                    http_response_code(201);
+                    echo json_encode([
+                        "message" => "Login Berhasil",
+                        "id" => $id
+                    ]);
+                }else{
+                    //TODO: masukin error message gagal disini
+                    http_response_code(401);
+                    echo json_encode([
+                        "message" => "Username atau Password Salah",
+                        "id" => $id
+                    ]);
+                }
                 break;
-
-            //default output (method not allowed)
             default:
                 http_response_code(405);
                 header("Allow: POST");
