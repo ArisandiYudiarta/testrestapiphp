@@ -25,18 +25,64 @@ class MakananGateway
         return $data; 
     }
 
-    public function searchMakanan($data)
+    public function searchMakanan($data): array
     {
+        $nama = isset($data['nama_makanan']) ? $data['nama_makanan'] : '';
+        $kategori = isset($data['kategori']) ? $data['kategori'] : '';
+        $merk = isset($data['merk']) ? $data['merk'] : '';
+        
+        // var_dump($nama, $gambar, $berat, $deskripsi, $kategori, $usia, $komposisi, $merk, $rating);
+        // die;
 
+        if (!empty($nama) && !empty($kategori) && !empty($merk)) {
+            $query = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori LIKE :kategori  AND merk LIKE :merk";
 
-        // $sql = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori = :kateori";
-        $sql = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori LIKE :kateori";
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
+            $statement->bindValue(":kategori", '%' . $data["kategori"] . '%', PDO::PARAM_STR);
+            $statement->bindValue(":merk", '%' . $data["merk"] . '%', PDO::PARAM_STR);
+        
+        } elseif (!empty($nama) && !empty($kategori)) {
+            $query = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND kategori LIKE :kategori";
 
-        var_dump($data["nama_makanan"]);
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
+            $statement->bindValue(":kategori", '%' . $data["kategori"] . '%', PDO::PARAM_STR);
+            
+        } elseif (!empty($nama) && !empty($merk)) {
+            $query = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan AND merk LIKE :merk";
 
-        $statement = $this->conn->prepare($sql);
-        $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
-        $statement->bindValue(":kateori", '%' . $data["kategori"] . '%', PDO::PARAM_INT);
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
+            $statement->bindValue(":merk", '%' . $data["merk"] . '%', PDO::PARAM_STR);
+        
+        } elseif (!empty($kategori) && !empty($merk)) {
+            $query = "SELECT * FROM makanan WHERE kategori LIKE :kategori AND merk LIKE :merk";
+
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":kategori", '%' . $data["kategori"] . '%', PDO::PARAM_STR);
+            $statement->bindValue(":merk", '%' . $data["merk"] . '%', PDO::PARAM_STR);
+
+        } elseif (!empty($nama)) {
+            $query = "SELECT * FROM makanan WHERE nama_makanan LIKE :nama_makanan";
+
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":nama_makanan", '%' . $data["nama_makanan"] . '%', PDO::PARAM_STR);
+            
+        } elseif (!empty($kategori)) {
+            $query = "SELECT * FROM makanan WHERE kategori LIKE :kategori";
+
+            
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":kategori", '%' . $data["kategori"] . '%', PDO::PARAM_STR);
+
+        } elseif (!empty($merk)) {
+            $query = "SELECT * FROM makanan WHERE merk LIKE :merk";
+
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(":merk", '%' . $data["merk"] . '%', PDO::PARAM_STR);
+        }
+
         $statement->execute();
 
         $data = [];
@@ -46,7 +92,7 @@ class MakananGateway
             $data[] = $row;
         }
 
-        if (empty($data)) {
+        if (empty($data)){
             return 0;
         }
 
@@ -75,7 +121,20 @@ class MakananGateway
         return $this->conn->lastInsertId();
     }
 
-    
+    public function get(string $id): array
+    {
+        $sql = "SELECT * FROM makanan WHERE id_makanan = :id_makanan";
 
-} 
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindValue(":id_makanan", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+    
+}
 ?>

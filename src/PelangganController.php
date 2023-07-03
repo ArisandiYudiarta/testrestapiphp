@@ -17,6 +17,11 @@ class PelangganController
             
             // var_dump($id);
             $this->Login($method, $id);
+
+        }elseif ($id == "logout"){
+            
+            // var_dump($id);
+            $this->Logout($method, $id);
         
         }else {
             
@@ -81,6 +86,27 @@ class PelangganController
                     ]);
                 }
                 break;
+            default:
+                http_response_code(405);
+                header("Allow: POST");
+        }
+    }
+
+    private function Logout(string $method, string $id)
+    {
+        switch ($method){
+            case "POST":
+                // var_dump($data);
+                // die;
+                $id = $this->gateway->Logout();
+
+                echo json_encode([
+                    "message" => "Logout Berhasil"
+                ]);
+                
+                break;
+
+            //default output (method not allowed)
             default:
                 http_response_code(405);
                 header("Allow: POST");

@@ -41,6 +41,9 @@ class MakananController
 
     private function processResourceRequestMakanan(string $method, string $id): void
     {   
+        $product = $this->gateway->get($id);
+
+        echo json_encode($product);
     }
 
     private function processCollectionRequestMakanan(string $method): void

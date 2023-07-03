@@ -62,8 +62,17 @@ class PelangganGateway
         }   
     }
 
+    public function Logout()
+    {
+        session_start();
+        session_destroy();
+    }
+
     public function Login(array $data): string
     {
+        session_start();
+
+        $uname = $data['username'];
         $userpass = $data['password'];
 
         $sql = "SELECT username, password 
@@ -84,6 +93,7 @@ class PelangganGateway
         if($count > 0){
             if (password_verify($userpass, $result['password']))
             {
+                $_SESSION["username"] = $uname;
                 return 1;
             }else{
                 return 0;
