@@ -34,9 +34,11 @@ class PelangganController
     {
         switch ($method){
             case "POST":
-                $data = $_POST;
+                $data = json_decode(file_get_contents("php://input"), true);
+                // $data = $_POST;
                 // var_dump($data);
                 // die;
+
                 $id = $this->gateway->Register($data);
                 
                 if ($id == 1){

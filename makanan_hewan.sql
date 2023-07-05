@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2023 at 11:29 AM
+-- Generation Time: Jun 28, 2023 at 02:02 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -45,8 +45,8 @@ CREATE TABLE `makanan` (
 --
 
 INSERT INTO `makanan` (`id_makanan`, `nama_makanan`, `gambar`, `berat`, `deskripsi`, `kategori`, `usia_pemakaian`, `komposisi`, `merk`, `rating`) VALUES
-(1, 'Whiskas Premium', 'nice.png', '200', 'makanan kucing premium yang populer', 'kucing', 1, 'ikan, vitamin, serat', 'whiskas', 4),
-(2, 'Blitz Yum', 'blit.jpg', '900', 'makanan anjing yang populer', 'anjing', 1, 'kolagen, ayam, sapi, telur, serat', 'blitz', 5),
+(1, 'Whiskas Premium', 'https://shorturl.at/ksORX', '200', 'makanan kucing premium yang populer', 'kucing', 1, 'ikan, vitamin, serat', 'whiskas', 4),
+(2, 'Pedigree', 'https://shorturl.at/qtCR2', '900', 'makanan anjing yang populer', 'anjing', 1, 'kolagen, ayam, sapi, telur, serat', 'pedigree', 5),
 (3, 'Poka', 'poka,jpg', '500', 'poka makanan kelinci', 'kelinci', 2, 'serat, sayur, vitamin', 'Po', 5),
 (4, 'HappyHamst', 'hamst', '200', 'makanan hamster', 'hamster', 1, 'biji bijian, serat, vitamin', 'Po', 4);
 
@@ -77,7 +77,8 @@ INSERT INTO `makanan_favorit` (`id_makanan_favorit`, `id_makanan`, `id_pelanggan
 (8, 4, 2),
 (9, 4, 2),
 (10, 4, 2),
-(11, 4, 2);
+(11, 4, 2),
+(12, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,7 @@ INSERT INTO `makanan_favorit` (`id_makanan_favorit`, `id_makanan`, `id_pelanggan
 CREATE TABLE `pelanggan` (
   `id_pelanggan` int(11) NOT NULL,
   `username` varchar(30) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `email` varchar(30) NOT NULL,
   `telp` varchar(12) NOT NULL
@@ -100,7 +101,10 @@ CREATE TABLE `pelanggan` (
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `username`, `password`, `nama`, `email`, `telp`) VALUES
 (1, 'arisandi', '123', 'I Gusti Agung Pt Arisandi Yudiarta', 'pepegaman@gmail.com', '081236000782'),
-(2, 'pizzaboy', '123', 'The Pizza Man', 'pizzaman@gmail.com', '081888888888');
+(2, 'pizzaboy', '123', 'The Pizza Man', 'pizzaman@gmail.com', '081888888888'),
+(9, 'arisandiy', '$2y$10$djhBxiqZRkbvrU5kUqIjn.LKuQvui0wDiQHkMKjPsFkNfZ48hqjwC', 'arisandiyudiarta', 'arisandiy@gmail.com', '081888000999'),
+(10, 'arisandiyudi', '$2y$10$j./kovhvZATXvO0yyXy0yeIXsOjUK.Do17ZpwUo2dqvNg6qnbcZ.O', 'arisandiyudiarta', 'arisandiy@gmail.com', '081888000999'),
+(11, 'arisandiyudiarta', '$2y$10$WGWH966PGPietcpbgD/30On/9sleNriUKZWlGWYSPPqbx.Nf1euN6', 'arisandiyudiarta', 'arisandiy@gmail.com', '081888000999');
 
 --
 -- Indexes for dumped tables
@@ -138,13 +142,13 @@ ALTER TABLE `makanan`
 -- AUTO_INCREMENT for table `makanan_favorit`
 --
 ALTER TABLE `makanan_favorit`
-  MODIFY `id_makanan_favorit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_makanan_favorit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

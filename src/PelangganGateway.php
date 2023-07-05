@@ -30,12 +30,12 @@ class PelangganGateway
     
     //tambah data
     public function Register(array $data):string
-    {
+    {   
         $passHash = password_hash($data["password"], PASSWORD_DEFAULT);
         $uname = $data["username"];
 
-        $sql = "INSERT INTO pelanggan(username, password, nama, email, telp)
-                VALUES (:username, :password, :nama, :email, :telp)";
+        $sql = "INSERT INTO pelanggan(username, password, email, telp)
+                VALUES (:username, :pass, :email, :telp)";
                 
         $checkQuery = "SELECT * FROM pelanggan WHERE username = :username";
 
@@ -51,8 +51,7 @@ class PelangganGateway
             $stmt = $this->conn->prepare($sql);
 
             $stmt->bindValue(":username", $data["username"], PDO::PARAM_STR);
-            $stmt->bindValue(":password", $passHash, PDO::PARAM_STR);
-            $stmt->bindValue(":nama", $data["nama"], PDO::PARAM_STR);
+            $stmt->bindValue(":pass", $passHash, PDO::PARAM_STR);
             $stmt->bindValue(":email", $data["email"], PDO::PARAM_STR);
             $stmt->bindValue(":telp", $data["telp"], PDO::PARAM_STR);
             
